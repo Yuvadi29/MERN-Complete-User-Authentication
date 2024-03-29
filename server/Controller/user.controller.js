@@ -62,7 +62,7 @@ const login = async (req, res) => {
     }
 };
 
-const verifyToken = (req, res) => {
+const verifyToken = (req, res, next) => {
     const headers = req.headers[`authorization`];
     const token = headers.split(" ")[1];
 
@@ -74,9 +74,27 @@ const verifyToken = (req, res) => {
             return res.status(400).json({ message: "Invalid Token" });
         }
         console.log(user.id);
+        req.userId = user.id;
+        next();
     });
     console.log(headers);
 }
 
+const getUser = async (req, res) => {
+    const userId = req.userId; 
 
-module.exports = { signup, login, verifyToken };
+    let user;
+    try {
+        user = await User.findById(userId, "-password");
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+
+    if (!user) {
+        return res.status(404).json({ message: "User Not Found" });
+    }
+    return res.status(200).json({ user });
+};
+
+module.exports = { signup, login, verifyToken, getUser };
