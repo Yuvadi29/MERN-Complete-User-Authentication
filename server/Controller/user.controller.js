@@ -62,4 +62,21 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = { signup, login };
+const verifyToken = (req, res) => {
+    const headers = req.headers[`authorization`];
+    const token = headers.split(" ")[1];
+
+    if (!token) {
+        res.status(404).json({ message: "No Token Found" });
+    }
+    jwt.verify(String(token), jwtSecret, (error, user) => {
+        if (error) {
+            return res.status(400).json({ message: "Invalid Token" });
+        }
+        console.log(user.id);
+    });
+    console.log(headers);
+}
+
+
+module.exports = { signup, login, verifyToken };
