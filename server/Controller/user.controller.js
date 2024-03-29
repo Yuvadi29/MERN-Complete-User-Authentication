@@ -53,6 +53,14 @@ const login = async (req, res) => {
             expiresIn: "1hr",
         });
 
+        res.cookie(String(existingUser._id), token, {
+            path: "/",
+            // 1000 miliseconds * 30 = 30 seconds
+            expires: new Date(Date.now() + 1000 * 30),
+            httpOnly: true,
+            sameSite: 'lax',
+        });
+
         return res.status(200).json({ message: "User Logged in Successfully", user: existingUser, token });
 
 
@@ -63,9 +71,9 @@ const login = async (req, res) => {
 };
 
 const verifyToken = (req, res, next) => {
-    const headers = req.headers[`authorization`];
-    const token = headers.split(" ")[1];
-
+    const cookies = req.headers.cookie;
+    const token = cookies.split("=")[1];
+    console.log(token);
     if (!token) {
         res.status(404).json({ message: "No Token Found" });
     }
@@ -77,11 +85,10 @@ const verifyToken = (req, res, next) => {
         req.userId = user.id;
         next();
     });
-    console.log(headers);
 }
 
 const getUser = async (req, res) => {
-    const userId = req.userId; 
+    const userId = req.userId;
 
     let user;
     try {
