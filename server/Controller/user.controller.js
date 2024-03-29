@@ -30,5 +30,26 @@ const signup = async (req, res) => {
     return res.status(201).json({ message: User });
 };
 
+const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
 
-module.exports = { signup };
+        const existingUser = await User.findOne({ email: email });
+        if (!existingUser) {
+            return res.status(400).json({ message: "User not Found, Kindly Signup" });
+        }
+
+        const isPasswordCorrect = bcrypt.compareSync(password, existingUser.password);
+        if (!isPasswordCorrect) {
+            return res.status(400).json({ message: "Invalid Email / Password" });
+        }
+
+        return res.status(200).json({ message: "User Logged in Successfully" });
+
+    } catch (error) {
+        console.log("Error Logging in: ", error);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+module.exports = { signup, login };
