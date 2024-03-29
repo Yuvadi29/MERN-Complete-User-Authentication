@@ -4,10 +4,12 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const router = require("./Routes/user.routes");
+const cors = require("cors");
 
 dotenv.config();
 app.use(cookieParser());
 app.use(express.json());
+app.use(cors());
 
 const PORT = process.env.PORT;
 const MongoUrl = process.env.MONGO_URL;
