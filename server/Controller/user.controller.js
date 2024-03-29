@@ -28,9 +28,9 @@ const signup = async (req, res) => {
         res.status(200).json({ message: "Data Saved", data: user });
     } catch (error) {
         console.log("Error saving user to database: ", error);
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 
-    return res.status(201).json({ message: User });
 };
 
 const login = async (req, res) => {
@@ -56,7 +56,7 @@ const login = async (req, res) => {
         res.cookie(String(existingUser._id), token, {
             path: "/",
             // 1000 miliseconds * 30 = 30 seconds
-            expires: new Date(Date.now() + 1000 * 30),
+            expires: new Date(Date.now() + 1000 * 60),
             httpOnly: true,
             sameSite: 'lax',
         });
@@ -73,7 +73,6 @@ const login = async (req, res) => {
 const verifyToken = (req, res, next) => {
     const cookies = req.headers.cookie;
     const token = cookies.split("=")[1];
-    console.log(token);
     if (!token) {
         res.status(404).json({ message: "No Token Found" });
     }
@@ -100,8 +99,9 @@ const getUser = async (req, res) => {
 
     if (!user) {
         return res.status(404).json({ message: "User Not Found" });
+    } else {
+        return res.status(200).json({ user });
     }
-    return res.status(200).json({ user });
 };
 
 module.exports = { signup, login, verifyToken, getUser };
