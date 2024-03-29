@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const router = require("./Routes/user.routes");
 
 dotenv.config();
 
@@ -14,6 +15,8 @@ try {
 } catch (error) {
     console.log("Error Connecting to Database: ", error);
 }
+
+app.use("/api", router);
 
 app.use('/', (req, res) => {
     res.send("Server is Up and Running!!");
