@@ -1,5 +1,8 @@
 const User = require("../Model/User");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+const jwtSecret = "HelloWorld";
 
 const signup = async (req, res) => {
     try {
@@ -44,7 +47,14 @@ const login = async (req, res) => {
             return res.status(400).json({ message: "Invalid Email / Password" });
         }
 
-        return res.status(200).json({ message: "User Logged in Successfully" });
+        const token = jwt.sign({
+            id: existingUser.id
+        }, jwtSecret, {
+            expiresIn: "1hr",
+        });
+
+        return res.status(200).json({ message: "User Logged in Successfully", user: existingUser, token });
+
 
     } catch (error) {
         console.log("Error Logging in: ", error);
