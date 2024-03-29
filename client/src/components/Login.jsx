@@ -12,8 +12,7 @@ const Login = () => {
 
   const sendRequest = async () => {
     const res = await axios
-      .post(`${BASEURL}/api/signup`, {
-        name,
+      .post(`${BASEURL}/api/login`, {
         email,
         password,
       })
@@ -25,7 +24,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    sendRequest().then(() => navigate("/login"));
+    sendRequest().then(() => navigate("/user"));
   };
 
   return (
