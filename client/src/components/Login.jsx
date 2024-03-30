@@ -3,10 +3,13 @@ import axios from "axios";
 import { BASEURL } from "../API";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import { useDispatch } from 'react-redux';
+import { authActions } from "../store/store";
 
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [, setCookie] = useCookies(["user"]);
@@ -27,7 +30,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    sendRequest().then(() => navigate("/user"));
+    sendRequest().then(() => dispatch(authActions.login())).then(() => navigate("/user"));
   };
 
   return (

@@ -1,6 +1,30 @@
-import React from 'react'
+import axios from 'axios';
+import React from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { BASEURL } from '../API';
+import { authActions } from "../store/store";
+import { useNavigate } from 'react-router-dom';
+axios.defaults.withCredentials = true;
 
 const Header = () => {
+    const isLoggedIn = useSelector(state => state.isLoggedIn);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const sendLogoutReq = async () => {
+        const res = await axios.post(`${BASEURL}/api/logout`, null, {
+            withCredentials: true,
+        });
+        if (res.status == 200) {
+            return res;
+        }
+        return new Error("Unable to Logout, Try Again");
+    }
+
+    const handleLogout = () => {
+        sendLogoutReq().then(() => dispatch(authActions.sendLogoutReq())).then(() => navigate("/"));
+    }
+
     return (
         <div>
             <nav className="border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
@@ -24,9 +48,14 @@ const Header = () => {
                             <li>
                                 <a href="/signup" className="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent uppercase">Signup</a>
                             </li>
-                            <li>
-                                <a href="/logout" className="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent uppercase">Logout</a>
-                            </li>
+                            {isLoggedIn && (
+                                <li>
+                                    <a
+                                        href="/"
+                                        onClick={handleLogout}
+                                        className="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent uppercase">Logout</a>
+                                </li>
+                            )}
                         </ul>
                     </div>
                 </div>

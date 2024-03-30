@@ -5,12 +5,12 @@ const Welcome = () => {
     const [cookie] = useCookies(["user"]);
 
     useEffect(() => {
-        console.log(cookie.user); // Log user data from cookie
+        console.log(cookie.user);
     }, [cookie]);
 
     return (
-        <div>
-            <h1>Welcome {cookie.user.name}</h1>
+        <div className='bg-gray-950 h-screen'>
+            <h1 className='text-white text-5xl justify-center items-center text-center'>Welcome {cookie.user.name}</h1>
         </div>
     );
 };
