@@ -47,7 +47,10 @@ const Landing = () => {
                         </a>
                     </div>
                 </div>
-                <button class="flex mx-auto mt-16 text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none  cursor-pointer rounded text-lg">Get Started</button>
+
+                <a href='/signup'>
+                    <button class="flex mx-auto mt-16 text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none  cursor-pointer rounded text-lg">Get Started</button>
+                </a>
             </div>
         </section>
     );
