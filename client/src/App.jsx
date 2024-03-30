@@ -5,8 +5,11 @@ import Landing from './components/Landing';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import Welcome from './components/Welcome';
+import { useSelector } from 'react-redux';
 
 const App = () => {
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+
   return (
     <div>
       <Header />
@@ -14,7 +17,7 @@ const App = () => {
         <Route path='/' element={<Landing />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/login' element={<Login />} />
-        <Route path='/user' element={<Welcome />} />
+        {isLoggedIn && <Route path='/user' element={<Welcome />} />}
       </Routes>
 
     </div>
