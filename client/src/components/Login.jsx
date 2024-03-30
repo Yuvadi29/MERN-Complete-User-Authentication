@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import axios from "axios";
 import { BASEURL } from "../API";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [, setCookie] = useCookies(["user"]);
 
 
   const sendRequest = async () => {
@@ -16,7 +19,8 @@ const Login = () => {
         password,
       })
       .catch((err) => console.log(err));
-    const data = await res.data;
+    const { data } = res;
+    setCookie("user", data.user);
     return data;
   };
 
