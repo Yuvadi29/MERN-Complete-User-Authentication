@@ -6,6 +6,8 @@ import Signup from './components/Signup';
 import Login from './components/Login';
 import Welcome from './components/Welcome';
 import { useSelector } from 'react-redux';
+import PasswordReset from './components/PasswordReset';
+import ForgotPassword from './components/ForgotPassword';
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
@@ -17,6 +19,8 @@ const App = () => {
         <Route path='/' element={<Landing />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/password-reset' element={<PasswordReset />} />
+        <Route path='/forgot-password/:id/:token' element={<ForgotPassword />} />
         {isLoggedIn && <Route path='/user' element={<Welcome />} />}
       </Routes>
 
